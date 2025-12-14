@@ -1,16 +1,16 @@
 # ros2cal-cli
 
-CLI na preklad leteckých rozpisov (jpg/jpeg/png) do ICS kalendára cez OpenAI.
+CLI tool to turn airline rosters (jpg/jpeg/png) into ICS calendar files using OpenAI.
 
-- OCR a parsovanie zabezpečuje OpenAI Responses API (pozri prompty v `ros2cal/prompts.py`).
-- Výstup je priamo `.ics` pripravené na import do Google/Apple kalendára.
-- Voliteľne uloží aj medzikrok JSON.
+- OCR + parsing via OpenAI Responses API (see prompts in `ros2cal/prompts.py`).
+- Output is `.ics` ready for Google/Apple Calendar import.
+- Optional intermediate JSON export.
 
-## Inštalácia
+## Installation
 
 - Python 3.14+.
-- API kľúč v premennej prostredia `OPENAI_API_KEY` (môžeš použiť `.env`).
-- Nainštaluj závislosti a CLI:
+- API key in env var `OPENAI_API_KEY` (you can use a `.env` file).
+- Install dependencies and CLI:
 
 ```bash
 python -m venv .venv
@@ -18,15 +18,15 @@ source .venv/bin/activate
 pip install -e .
 ```
 
-## Použitie
+## Usage
 
-Najjednoduchšie:
+Simplest:
 
 ```bash
 ros2cal path/to/roster.jpg
 ```
 
-Uloženie aj JSON + vlastný názov kalendára a timezone pre popisy:
+Save JSON too + custom calendar name and timezone for descriptions:
 
 ```bash
 ros2cal roster.jpg \
@@ -36,4 +36,4 @@ ros2cal roster.jpg \
   --local-tz Europe/Prague
 ```
 
-Výstupný súbor `.ics` sa predvolene uloží vedľa vstupného obrázka (`roster.ics`).
+The `.ics` file is saved next to the input image by default (`roster.ics`).
