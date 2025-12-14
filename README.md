@@ -26,14 +26,13 @@ Simplest:
 ros2cal path/to/roster.jpg
 ```
 
-Save JSON too + custom calendar name and timezone for descriptions:
+Save JSON too + custom calendar name:
 
 ```bash
 ros2cal roster.jpg \
   --json-output out/roster.json \
   --ics-output out/roster.ics \
   --calendar-name "My Roster" \
-  --local-tz Europe/Prague
 ```
 
 The `.ics` file is saved next to the input image by default (`roster.ics`).
