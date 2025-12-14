@@ -4,6 +4,21 @@ version = "0.1.0"
 description = "Convert airline roster images to JSON and ICS for Google Calendar"
 readme = "README.md"
 requires-python = ">=3.14"
+dependencies = [
+    "openai>=1.55.0",
+    "pillow>=10.0.0",
+    "python-dotenv>=1.0.0",
+]
 
 [project.scripts]
-roster2ics = "roster_tool.cli:main"
+ros2cal = "ros2cal.cli:main"
+
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
