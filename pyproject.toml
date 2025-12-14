@@ -1,0 +1,9 @@
+[project]
+name = "ros2cal-cli"
+version = "0.1.0"
+description = "Convert airline roster images to JSON and ICS for Google Calendar"
+readme = "README.md"
+requires-python = ">=3.14"
+
+[project.scripts]
+roster2ics = "roster_tool.cli:main"
