@@ -21,5 +21,11 @@ The main pain point was OCR quality. Standard tools failed on roster layouts, so
 - Deterministic params: `temperature=0`, `top_p=1`.
 - Two-stage flow: OCR/AI vision first, then parsing as a separate call with its own guardrails.
 
+## Cost Snapshot
+Using standard pricing as of 14 Dec 2025, a typical run lands around ~$0.05:
+- AI Vision (gpt-4.1, OCR): input 1,646 tokens (~$0.003292) + output 1,137 tokens (~$0.009096) → ~$0.012388.
+- Text-to-JSON (gpt-5.1, parsing): input 3,228 tokens (~$0.004035) + output 2,715 tokens (~$0.027150) → ~$0.031185.
+- Total per roster: ~$0.0436 (round to $0.05). Cached input was 0 in this sample; hitting cache would lower the input cost further.
+
 ## Status / Next Ideas
 Today the CLI, prompts, JSON→ICS formatter, docs, and packaging are done. Next steps that consider a thin web front end for drag-and-drop uploads that calls the same pipeline. 

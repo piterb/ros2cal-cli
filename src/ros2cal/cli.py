@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Optional
 
 from .ics import DEFAULT_LOCAL_TZ, json_to_ics
-from .ocr import RosterParser
+from .ocr import CallUsage, RosterParseResult, RosterParser
 
 
 def roster_image_to_ics(
@@ -18,10 +18,11 @@ def roster_image_to_ics(
     json_output: Optional[Path] = None,
     calendar_name: str = "Roster",
     local_tz: str = DEFAULT_LOCAL_TZ,
-) -> Path:
+) -> tuple[Path, RosterParseResult]:
     """Run the full pipeline: JPG -> OCR -> JSON -> ICS."""
     parser = RosterParser()
-    roster_json = parser.parse_image(image_path)
+    result = parser.parse_image(image_path)
+    roster_json = result.data
 
     if json_output:
         json_output.parent.mkdir(parents=True, exist_ok=True)
@@ -34,7 +35,7 @@ def roster_image_to_ics(
     ics_content = json_to_ics(roster_json, calendar_name=calendar_name, local_tz=local_tz)
     ics_output.parent.mkdir(parents=True, exist_ok=True)
     ics_output.write_text(ics_content, encoding="utf-8", newline="\n")
-    return ics_output
+    return ics_output, result
 
 
 def build_arg_parser() -> argparse.ArgumentParser:
@@ -76,14 +77,25 @@ def main(argv: Optional[list[str]] = None) -> None:
 
     ics_output = args.ics_output or image_path.with_suffix(".ics")
 
-    roster_image_to_ics(
+    ics_path, result = roster_image_to_ics(
         image_path,
         ics_output=ics_output,
         json_output=args.json_output,
         calendar_name=args.calendar_name,
         local_tz=args.local_tz,
     )
-    print(f"ICS saved to: {ics_output}")
+    print(f"ICS saved to: {ics_path}")
+
+    def fmt_usage(label: str, usage: CallUsage) -> str:
+        cached_flag = "cached" if usage.cached_input_tokens else "normal"
+        return (
+            f"{label}: input={usage.input_tokens} (cached={usage.cached_input_tokens}, {cached_flag}), "
+            f"output={usage.output_tokens}, total={usage.effective_total}"
+        )
+
+    print("OpenAI token usage:")
+    print(f"- {fmt_usage('OCR', result.ocr_usage)}")
+    print(f"- {fmt_usage('Parse', result.parse_usage)}")
 
 
 if __name__ == "__main__":
